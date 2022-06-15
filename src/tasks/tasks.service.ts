@@ -32,13 +32,9 @@ export class TasksService {
     return this.tasks;
   }
 
-  updateTaskStatus(id: string, status: TaskStatus): Task[] {
-    this.tasks.map((task) => {
-      if (task.id === id) {
-        task.status = status;
-      }
-      return task;
-    });
-    return this.tasks;
+  updateTaskStatus(id: string, status: TaskStatus): Task {
+    const task = this.getTaskById(id);
+    task.status = status;
+    return task;
   }
 }
