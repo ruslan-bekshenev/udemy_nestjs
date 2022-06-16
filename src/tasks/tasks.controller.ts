@@ -31,18 +31,19 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskById(@Param(':id') id: string) {
+  getTaskById(@Param('id') id: string) {
+    console.log(id);
     return this.taskService.getTaskById(id);
   }
 
   @Delete('/:id')
-  deleteTask(@Param(':id') id: string) {
+  deleteTask(@Param('id') id: string) {
     return this.taskService.deleteTask(id);
   }
 
   @Patch('/:id/status')
   updateTaskStatus(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body('status') status: TaskStatus,
   ) {
     return this.taskService.updateTaskStatus(id, status);
