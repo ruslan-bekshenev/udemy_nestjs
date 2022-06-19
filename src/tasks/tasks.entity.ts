@@ -16,6 +16,6 @@ export class Task {
   @Column()
   status: TaskStatus;
 
-  @ManyToOne((_type) => Task, (task) => task.user, { eager: false })
+  @ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
   user: User;
 }
