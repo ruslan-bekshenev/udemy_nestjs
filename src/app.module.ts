@@ -11,9 +11,9 @@ import { TasksModule } from './tasks/tasks.module';
       port: 5432,
       database: 'task-management',
       username: 'ruslanbeksenev',
-      password: 'steeki2323',
-      autoLoadEntities: true,
+      password: 'steeki23',
       synchronize: true,
+      autoLoadEntities: true,
     }),
   ],
 })

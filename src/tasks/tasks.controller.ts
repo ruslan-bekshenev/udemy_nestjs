@@ -11,7 +11,8 @@ import {
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatus } from './dto/update-task-status.dto';
-import { Task, TaskStatus } from './tasks.model';
+import { TaskStatus } from './tasks-status.enum';
+import { Task } from './tasks.entity';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -19,7 +20,7 @@ export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get()
-  getTasks(@Query() filterDto: GetTasksFilterDto): Task[] {
+  getTasks(@Query() filterDto: GetTasksFilterDto): any[] {
     if (Object.keys(filterDto).length) {
       this.taskService.getTasksWithFilters(filterDto);
     }
@@ -27,13 +28,12 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): Task {
+  createTask(@Body() createTaskDto: CreateTaskDto): any {
     return this.taskService.createTask(createTaskDto);
   }
 
   @Get('/:id')
-  getTaskById(@Param('id') id: string) {
-    console.log(id);
+  getTaskById(@Param('id') id: string): Promise<Task> {
     return this.taskService.getTaskById(id);
   }
 
