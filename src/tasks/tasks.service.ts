@@ -13,22 +13,24 @@ export class TasksService {
   ) {}
 
   private tasks: Task[] = [];
-  getTasks(): Task[] {
-    return this.tasks;
-  }
-  getTasksWithFilters(filterDto: GetTasksFilterDto) {
+  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
     const { status, search } = filterDto;
-    let tasks = this.getTasks();
+
+    const query = this.tasksRepository.createQueryBuilder('task');
+
     if (status) {
-      tasks = tasks.filter((task) => task.status === status);
+      query.andWhere('task.status = :status', { status });
     }
+
     if (search) {
-      tasks = tasks.filter(
-        (task) =>
-          task.title.toLowerCase().includes(search) ||
-          task.description.toLowerCase().includes(search),
+      query.andWhere(
+        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',
+        { search: `%${search}%` },
       );
     }
+
+    const tasks = await query.getMany();
+
     return tasks;
   }
 
@@ -60,9 +62,10 @@ export class TasksService {
       throw new NotFoundException(`Task with ${id} not found`);
     }
   }
-  updateTaskStatus(id: string, status: TaskStatus): any {
-    // const task = this.getTaskById(id);
-    // task.status = status;
-    // return task;
+  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+    const task = await this.getTaskById(id);
+    task.status = status;
+    await this.tasksRepository.save(task);
+    return task;
   }
 }
